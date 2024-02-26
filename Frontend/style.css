@@ -1,0 +1,38 @@
+.container {
+  max-width: 100%;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+input[type='text'] {
+  padding: 10px;
+  width: 70%;
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+#resultContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+.product {
+  flex-basis: 20%;
+}
