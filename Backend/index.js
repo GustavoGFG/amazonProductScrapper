@@ -31,14 +31,16 @@ app.post('/api/scraped', async (req, res) => {
       args: chrome.args,
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
-      headless: true,
+      headless: false,
       // ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 
     await page.goto(url, {
       waitUntil: 'domcontentloaded',
+      // waitUntil: 'networkidle2',
     });
+    await page.reload({ waitUntil: 'networkidle2' });
 
     await page.waitForSelector('[data-component-type="s-search-result"]');
 
