@@ -8,13 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (searchedWord) {
       try {
-        const response = await fetch('/api/scraped', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ keyword: searchedWord }),
-        });
+        const response = await fetch(
+          'https://amazonscrapperbackend.onrender.com/api/scraped',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ keyword: searchedWord }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error('Failed to fetch data');
