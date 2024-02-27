@@ -35,7 +35,12 @@ app.post('/api/scraped', async (req, res) => {
   let options = {};
   if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
     options = {
-      args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+      args: [
+        ...chrome.args,
+        '--hide-scrollbars',
+        '--disable-web-security',
+        '--enable-gpu',
+      ],
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
       headless: true,
