@@ -35,19 +35,7 @@ app.get('/', (req, res) => {
 app.post('/api/scraped', async (req, res) => {
   // let options = {};
   // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  let options = {
-    args: [
-      ...chrome.args,
-      '--hide-scrollbars',
-      '--disable-web-security',
-      '--enable-gpu',
-    ],
-    defaultViewport: chrome.defaultViewport,
-    executablePath:
-      process.env.CHROME_EXECUTABLE_PATH || (await chrome.executablePath),
-    headless: true,
-    ignoreHTTPSErrors: true,
-  };
+
   // }
 
   const keyword = req.body.keyword;
@@ -55,7 +43,19 @@ app.post('/api/scraped', async (req, res) => {
   console.log(keyword);
   console.log(url);
   try {
-    const browser = await puppeteer.launch(options);
+    const browser = await puppeteer.launch({
+      args: [
+        ...chrome.args,
+        '--hide-scrollbars',
+        '--disable-web-security',
+        '--enable-gpu',
+      ],
+      defaultViewport: chrome.defaultViewport,
+      executablePath:
+        process.env.CHROME_EXECUTABLE_PATH || (await chrome.executablePath),
+      headless: true,
+      ignoreHTTPSErrors: true,
+    });
     const page = await browser.newPage();
 
     await page.goto(url, {
