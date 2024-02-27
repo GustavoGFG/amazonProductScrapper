@@ -3,20 +3,9 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 
-// import chromeModule from 'chrome-aws-lambda';
 import chrome from 'chrome-aws-lambda';
-// import puppeteerCore from 'puppeteer-core';
-// import puppeteerModule from 'puppeteer';
-import puppeteer from 'puppeteer-core';
-// let chrome;
-// let puppeteer;
-
-// if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-//   chrome = chromeModule;
-//   puppeteer = puppeteerCore;
-// } else {
-//   puppeteer = puppeteerModule;
-// }
+// import puppeteer from 'puppeteer-core';
+import puppeteer from 'puppeteer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,29 +22,15 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/scraped', async (req, res) => {
-  // let options = {};
-  // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-
-  // }
-
   const keyword = req.body.keyword;
   const url = `https://www.amazon.com.br/s?k=${keyword}`;
   console.log(keyword);
   console.log(url);
   try {
-    // const browserFetcher = puppeteer.createBrowserFetcher();
-    // const revisionInfo = await browserFetcher.download('some-chromium-version');
-
     const browser = await puppeteer.launch({
-      args: [
-        ...chrome.args,
-        '--hide-scrollbars',
-        '--disable-web-security',
-        '--enable-gpu',
-      ],
+      args: chrome.args,
       defaultViewport: chrome.defaultViewport,
-      executablePath:
-        process.env.CHROME_EXECUTABLE_PATH || (await chrome.executablePath),
+      executablePath: await chrome.executablePath,
       headless: true,
       ignoreHTTPSErrors: true,
     });
