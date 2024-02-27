@@ -1,0 +1,11 @@
+services:
+  - name: web
+    buildCommand: npm install
+    startCommand: node index.js
+    env:
+      - key: PUPPETEER_SKIP_CHROMIUM_DOWNLOAD
+        value: 'true'
+    install:
+      - apt-get update
+      - apt-get install -y chromium-browser
+      - npx puppeteer browsers install chrome
