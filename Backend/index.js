@@ -14,9 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+// app.use(express.static(path.join(__dirname, '../frontend')));
 
 // const keyword = 'harry potter';
+
+app.get('/', (req, res) => {
+  res.send('Server working');
+});
 
 app.post('/api/scraped', async (req, res) => {
   const keyword = req.body.keyword;
