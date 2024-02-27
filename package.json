@@ -8,6 +8,9 @@
     "start": "node Backend/index.js",
     "dev": "nodemon Backend/index.js"
   },
+  "config": {
+    "puppeteer_download_path": "./node_modules/puppeteer/.local-chromium"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
