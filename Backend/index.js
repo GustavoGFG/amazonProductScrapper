@@ -1,5 +1,5 @@
-// import puppeteer from 'puppeteer';
-import puppeteer from 'puppeteer-core';
+import puppeteer from 'puppeteer';
+// import puppeteer from 'puppeteer-core';
 import express from 'express';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
