@@ -1,8 +1,21 @@
-import puppeteer from 'puppeteer';
 import express from 'express';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
+
+import chromeModule from 'chrome-aws-lambda';
+import puppeteerCore from 'puppeteer-core';
+import puppeteerModule from 'puppeteer';
+
+let chrome;
+let puppeteer;
+
+if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  chrome = chromeModule;
+  puppeteer = puppeteerCore;
+} else {
+  puppeteer = puppeteerModule;
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,15 +36,27 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/scraped', async (req, res) => {
+  let options = {};
+  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+    options = {
+      args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
+      defaultViewport: chrome.defaultViewport,
+      executablePath: await chrome.executablePath,
+      headless: true,
+      ignoreHTTPSErrors: true,
+    };
+  }
+
   const keyword = req.body.keyword;
   const url = `https://www.amazon.com.br/s?k=${keyword}`;
   console.log(keyword);
   console.log(url);
   try {
-    const browser = await puppeteer.launch({
-      headless: true, // Change to true for production
-      defaultViewport: null,
-    });
+    const browser = await puppeteer.launch(options);
+    // {
+    //   headless: true, // Change to true for production
+    //   defaultViewport: null,
+    // }
     const page = await browser.newPage();
 
     await page.goto(url, {
