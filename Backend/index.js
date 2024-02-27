@@ -17,11 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-// app.get('/', (req, res) => {
-//   res.send('Server working');
-// });
-
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.get('/', (req, res) => {
+  res.send('Server working');
+});
 
 app.post('/api/scraped', async (req, res) => {
   const keyword = req.body.keyword;
