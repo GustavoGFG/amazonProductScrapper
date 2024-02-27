@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 
 // import chromeModule from 'chrome-aws-lambda';
+import chrome from 'chrome-aws-lambda';
 // import puppeteerCore from 'puppeteer-core';
 // import puppeteerModule from 'puppeteer';
 import puppeteer from 'puppeteer-core';
