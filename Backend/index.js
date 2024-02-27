@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.post('/api/scraped', async (req, res) => {
   // let options = {};
   // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  options = {
+  let options = {
     args: [
       ...chrome.args,
       '--hide-scrollbars',
