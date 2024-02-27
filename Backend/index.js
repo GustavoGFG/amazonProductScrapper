@@ -43,8 +43,8 @@ app.post('/api/scraped', async (req, res) => {
   console.log(keyword);
   console.log(url);
   try {
-    const browserFetcher = puppeteer.createBrowserFetcher();
-    const revisionInfo = await browserFetcher.download('some-chromium-version');
+    // const browserFetcher = puppeteer.createBrowserFetcher();
+    // const revisionInfo = await browserFetcher.download('some-chromium-version');
 
     const browser = await puppeteer.launch({
       args: [
@@ -55,8 +55,7 @@ app.post('/api/scraped', async (req, res) => {
       ],
       defaultViewport: chrome.defaultViewport,
       executablePath:
-        process.env.CHROME_EXECUTABLE_PATH ||
-        (await revisionInfo.executablePath),
+        process.env.CHROME_EXECUTABLE_PATH || (await chrome.executablePath),
       headless: true,
       ignoreHTTPSErrors: true,
     });
