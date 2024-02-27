@@ -3,19 +3,19 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 
-import chromeModule from 'chrome-aws-lambda';
-import puppeteerCore from 'puppeteer-core';
-import puppeteerModule from 'puppeteer';
+// import chromeModule from 'chrome-aws-lambda';
+// import puppeteerCore from 'puppeteer-core';
+// import puppeteerModule from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+// let chrome;
+// let puppeteer;
 
-let chrome;
-let puppeteer;
-
-if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-  chrome = chromeModule;
-  puppeteer = puppeteerCore;
-} else {
-  puppeteer = puppeteerModule;
-}
+// if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+//   chrome = chromeModule;
+//   puppeteer = puppeteerCore;
+// } else {
+//   puppeteer = puppeteerModule;
+// }
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,21 +32,22 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/scraped', async (req, res) => {
-  let options = {};
-  if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
-    options = {
-      args: [
-        ...chrome.args,
-        '--hide-scrollbars',
-        '--disable-web-security',
-        '--enable-gpu',
-      ],
-      defaultViewport: chrome.defaultViewport,
-      executablePath: await chrome.executablePath,
-      headless: true,
-      ignoreHTTPSErrors: true,
-    };
-  }
+  // let options = {};
+  // if (process.env.AWS_LAMBDA_FUNCTION_VERSION) {
+  options = {
+    args: [
+      ...chrome.args,
+      '--hide-scrollbars',
+      '--disable-web-security',
+      '--enable-gpu',
+    ],
+    defaultViewport: chrome.defaultViewport,
+    executablePath:
+      process.env.CHROME_EXECUTABLE_PATH || (await chrome.executablePath),
+    headless: true,
+    ignoreHTTPSErrors: true,
+  };
+  // }
 
   const keyword = req.body.keyword;
   const url = `https://www.amazon.com.br/s?k=${keyword}`;
