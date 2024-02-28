@@ -44,17 +44,6 @@ app.get('/api/scrape', async (req, res) => {
 
     while (maxRetries > 0) {
       try {
-        //
-        // Check if the 'widgetId=messaging-messages-no-results' div is present
-
-        const noResultsElement = await page.$(
-          '.widgetId=messaging-messages-no-results'
-        );
-        if (noResultsElement) {
-          productNotFound = true;
-          break;
-        }
-        //
         await page.waitForSelector('[data-component-type="s-search-result"]', {
           timeout: 10000, // Increase timeout if necessary
         });

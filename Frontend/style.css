@@ -143,9 +143,9 @@ button:hover:not(:disabled) {
   border-top: 5px solid #ffa41c;
   animation: spin 1s linear infinite;
   position: absolute;
-  left: 50%;
+  left: calc(50% - 30px);
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50% -50%);
 }
 footer {
   background: #131921;
