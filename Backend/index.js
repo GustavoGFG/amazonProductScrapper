@@ -17,9 +17,13 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.post('/api/scraped', async (req, res) => {
-  const keyword = req.body.keyword;
-  const url = `https://www.amazon.com.br/s?k=${keyword}`;
+app.get('/api/scrape', async (req, res) => {
+  const keyword = req.query.keyword; // Retrieve keyword from query parameters
+  if (!keyword) {
+    return res.status(400).json({ error: 'Keyword parameter is required' });
+  }
+
+  const url = `https://www.amazon.com.br/s?k=${encodeURIComponent(keyword)}`;
   console.log(keyword);
   console.log(url);
   try {
@@ -28,7 +32,6 @@ app.post('/api/scraped', async (req, res) => {
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
       headless: true,
-      // headless: false,
     });
     const page = await browser.newPage();
 
@@ -41,6 +44,17 @@ app.post('/api/scraped', async (req, res) => {
 
     while (maxRetries > 0) {
       try {
+        //
+        // Check if the 'widgetId=messaging-messages-no-results' div is present
+
+        const noResultsElement = await page.$(
+          '.widgetId=messaging-messages-no-results'
+        );
+        if (noResultsElement) {
+          productNotFound = true;
+          break;
+        }
+        //
         await page.waitForSelector('[data-component-type="s-search-result"]', {
           timeout: 10000, // Increase timeout if necessary
         });
@@ -95,13 +109,16 @@ app.post('/api/scraped', async (req, res) => {
     await browser.close();
 
     if (products.length > 0) {
-      res.json(products);
+      res.json({ success: true, data: products });
     } else {
-      res.json({ message: 'Selector not found or no products scraped' });
+      res.json({
+        success: false,
+        message: 'Selector not found or no products scraped',
+      });
     }
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 });
 

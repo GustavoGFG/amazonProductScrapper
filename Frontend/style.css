@@ -1,38 +1,205 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100%;
+  /* background: #3498db; */
+}
+header {
+  height: 120px;
+}
+main {
+  min-height: calc(100dvh - 180px);
+  padding-top: 20px;
+}
+h1 {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  color: #fff;
+}
+h2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%);
+}
 .container {
   max-width: 100%;
-  margin: 50px auto;
   text-align: center;
 }
-
+.search-container {
+  background-color: #131921;
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  /* Add a light box shadow */
+  /* margin-bottom: 20px; */
+}
 .form-group {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 input[type='text'] {
-  padding: 10px;
-  width: 70%;
-  margin-right: 10px;
+  padding: 10px 20px;
+  width: 80%;
+  max-width: 300px;
+  margin-right: 0px;
+  outline: none;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  background: #f7f5f5;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 10px 15px;
+  background-color: #febd69;
   color: #fff;
   border: none;
   cursor: pointer;
+  border-radius: 0 5px 5px 0;
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-button:hover {
-  background-color: #0056b3;
+button:hover:not(:disabled) {
+  background-color: #eca240;
+}
+#searchBtn .fa-solid {
+  color: black;
+  font-size: 14px;
 }
 #resultContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
   padding: 20px;
-  flex-wrap: wrap;
 }
 .product {
-  flex-basis: 20%;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Add a light box shadow */
+  /* margin-bottom: 20px; Add margin between product cards */
+  gap: 15px;
+}
+
+.img-container {
+  height: 250px;
+  display: flex;
+  align-self: stretch;
+  justify-content: center;
+}
+.img-container img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.product h3 {
+  font-size: 16px;
+  justify-self: stretch;
+  margin: 0;
+}
+.rating-review {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  justify-content: center;
+  justify-self: flex-end;
+  /* background: #3498db; */
+}
+.fa-solid,
+.fa-regular {
+  color: #ffa41c;
+}
+.rating-review p {
+  font-weight: 600;
+}
+.rating-tooltip {
+  background-color: #131921e1;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  position: relative;
+  pointer-events: none; /* Ensures the tooltip doesn't interfere with mouse events */
+}
+.loading-animation {
+  display: none;
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #ffa41c;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+footer {
+  background: #131921;
+  color: #fff;
+  padding: 0 6px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+footer a {
+  margin-left: 5px;
+  text-decoration: none;
+  color: #febd69;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1200px) {
+  #resultContainer {
+    display: grid;
+    grid-template-columns: repeat(3, calc(33.3% - 10px));
+    gap: 15px;
+    padding: 10px;
+  }
+}
+@media (max-width: 900px) {
+  #resultContainer {
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 7px));
+    gap: 15px;
+    padding: 10px;
+  }
+  .img-container {
+    height: 200px;
+  }
+}
+@media (max-width: 600px) {
+  #resultContainer {
+    display: grid;
+    grid-template-columns: repeat(1, 100%);
+    gap: 15px;
+    padding: 10px;
+  }
+  .img-container {
+    height: 150px;
+  }
 }

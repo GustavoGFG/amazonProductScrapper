@@ -5,19 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Amazon Product Scraper</title>
     <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://kit.fontawesome.com/53a00de455.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="container">
-      <h1>Amazon Product Scraper</h1>
-      <div class="form-group">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Enter search term..."
-        />
-        <button id="searchBtn">Search</button>
-      </div>
-      <div id="resultContainer"></div>
+      <header class="search-container">
+        <h1>Amazon Product Scraper</h1>
+        <div class="form-group">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Enter search term..."
+          />
+          <button id="searchBtn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </header>
+      <main>
+        <div id="loadingAnimation" class="loading-animation"></div>
+        <div id="resultContainer"></div>
+      </main>
+      <footer>
+        Developed by
+        <a href="https://gustavogfg.github.io/GustavoDeveloper/" target="_blank"
+          >Gustavo Fernandes</a
+        >
+      </footer>
     </div>
 
     <script src="./script.js"></script>
