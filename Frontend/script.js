@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingAnimation.style.display = 'block';
       try {
         const response = await fetch(
-          `https://amazonscrapperbackend.onrender.com//api/scrape?keyword=${encodeURIComponent(
+          `https://amazonscrapperbackend.onrender.com/api/scrape?keyword=${encodeURIComponent(
             searchedWord
           )}`
         );
