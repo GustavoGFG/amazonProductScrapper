@@ -27,7 +27,6 @@ app.post('/api/scraped', async (req, res) => {
       args: chrome.args,
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
-      // headless: false,
       headless: true,
     });
     const page = await browser.newPage();
@@ -36,15 +35,16 @@ app.post('/api/scraped', async (req, res) => {
       waitUntil: 'domcontentloaded',
     });
 
-    let maxRetries = 3;
+    let maxRetries = 10;
     let products = [];
 
     while (maxRetries > 0) {
       try {
         await page.waitForSelector('[data-component-type="s-search-result"]', {
-          timeout: 5000, // Increase timeout if necessary
+          timeout: 10000, // Increase timeout if necessary
         });
 
+        console.log('Selector found. Scraping products...');
         products = await page.evaluate(() => {
           const productElements = document.querySelectorAll(
             '[data-component-type="s-search-result"]'
@@ -93,7 +93,11 @@ app.post('/api/scraped', async (req, res) => {
 
     await browser.close();
 
-    res.json(products);
+    if (products.length > 0) {
+      res.json(products);
+    } else {
+      res.json({ message: 'Selector not found or no products scraped' });
+    }
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
