@@ -4,7 +4,6 @@ import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 
 import chrome from 'chrome-aws-lambda';
-// import puppeteer from 'puppeteer-core';
 import puppeteer from 'puppeteer';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,11 +15,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-
-// app.get('/', (req, res) => {
-//   res.send('Server working');
-// });
-
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.post('/api/scraped', async (req, res) => {
@@ -33,50 +27,69 @@ app.post('/api/scraped', async (req, res) => {
       args: chrome.args,
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
+      // headless: false,
       headless: true,
-      // ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
 
     await page.goto(url, {
       waitUntil: 'domcontentloaded',
-      // waitUntil: 'networkidle2',
     });
-    await page.reload({ waitUntil: 'networkidle2' });
-    await page.waitForSelector('[data-component-type="s-search-result"]');
 
-    const products = await page.evaluate(() => {
-      const productElements = document.querySelectorAll(
-        '[data-component-type="s-search-result"]'
-      );
-      const productsArray = [];
+    let maxRetries = 3;
+    let products = [];
 
-      productElements.forEach(element => {
-        const obj = { title: '', rating: '', numberOfReviews: '', img: '' };
+    while (maxRetries > 0) {
+      try {
+        await page.waitForSelector('[data-component-type="s-search-result"]', {
+          timeout: 5000, // Increase timeout if necessary
+        });
 
-        const productTitle = element.querySelector('h2 span');
-        obj.title = productTitle ? productTitle.textContent : 'N/A';
+        products = await page.evaluate(() => {
+          const productElements = document.querySelectorAll(
+            '[data-component-type="s-search-result"]'
+          );
+          const productsArray = [];
 
-        const numberReviewsElement = element.querySelector(
-          '.a-size-base.s-underline-text'
-        );
-        obj.numberOfReviews = numberReviewsElement
-          ? Number(numberReviewsElement.textContent)
-          : 'N/A';
+          productElements.forEach(element => {
+            const obj = { title: '', rating: '', numberOfReviews: '', img: '' };
 
-        const ratingElement = element.querySelector('.a-icon-alt');
-        obj.rating = ratingElement
-          ? Number(ratingElement.textContent.split(' ')[0].replace(',', '.'))
-          : 'N/A';
+            const productTitle = element.querySelector('h2 span');
+            obj.title = productTitle ? productTitle.textContent : 'N/A';
 
-        const imgElement = element.querySelector('.s-image');
-        obj.img = imgElement ? imgElement.getAttribute('src') : 'N/A';
+            const numberReviewsElement = element.querySelector(
+              '.a-size-base.s-underline-text'
+            );
+            obj.numberOfReviews = numberReviewsElement
+              ? Number(numberReviewsElement.textContent)
+              : 'N/A';
 
-        productsArray.push(obj);
-      });
+            const ratingElement = element.querySelector('.a-icon-alt');
+            obj.rating = ratingElement
+              ? Number(
+                  ratingElement.textContent.split(' ')[0].replace(',', '.')
+                )
+              : 'N/A';
 
-      return productsArray;
-    });
+            const imgElement = element.querySelector('.s-image');
+            obj.img = imgElement ? imgElement.getAttribute('src') : 'N/A';
+
+            productsArray.push(obj);
+          });
+
+          return productsArray;
+        });
+
+        break; // Break the loop if selector found and products extracted successfully
+      } catch (error) {
+        console.error('Error finding selector, retrying...');
+        maxRetries--;
+        if (maxRetries === 0) {
+          throw error; // Throw error if retries exhausted
+        }
+        await page.reload({ waitUntil: 'domcontentloaded' });
+      }
+    }
 
     await browser.close();
 
