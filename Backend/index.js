@@ -33,7 +33,7 @@ app.post('/api/scraped', async (req, res) => {
       args: chrome.args,
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
-      headless: false,
+      headless: true,
       // ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
@@ -43,7 +43,6 @@ app.post('/api/scraped', async (req, res) => {
       // waitUntil: 'networkidle2',
     });
     await page.reload({ waitUntil: 'networkidle2' });
-
     await page.waitForSelector('[data-component-type="s-search-result"]');
 
     const products = await page.evaluate(() => {
