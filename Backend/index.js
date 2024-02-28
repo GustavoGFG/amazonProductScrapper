@@ -33,7 +33,7 @@ app.post('/api/scraped', async (req, res) => {
       args: chrome.args,
       defaultViewport: chrome.defaultViewport,
       executablePath: await chrome.executablePath,
-      headless: true,
+      headless: false,
       // ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
