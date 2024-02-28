@@ -202,4 +202,7 @@ footer a {
   .img-container {
     height: 150px;
   }
+  h1 {
+    font-size: 26px;
+  }
 }
