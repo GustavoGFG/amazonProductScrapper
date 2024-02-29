@@ -1,10 +1,13 @@
-# Amazon Scraper
+# [Amazon Scraper](https://amazonscrapped.vercel.app/)
+
+![scrapper](https://github.com/GustavoGFG/amazonProductScrapper/assets/112188508/88e0f463-e47a-443f-9081-49b9fa360cf9)
 
 Welcome to the Amazon Scraper repository! This project provides a web scraping solution to retrieve product information from Amazon's website based on user-provided keywords. With this tool, you can easily search for products on Amazon and extract essential details such as titles, ratings, number of reviews, and images.
 
-## Live Demo
+## Demo
 
-You can try out the Amazon Scraper by visiting the live demo [here](https://amazonscrapped.vercel.app/). Feel free to enter any search term and explore the scraped results!
+You can access the live demo of Amazon Scraper [here](https://amazonscrapped.vercel.app/).
+Feel free to enter any search term and explore the scraped results!
 
 ## Features
 
